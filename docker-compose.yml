@@ -16,16 +16,6 @@ services:
       timeout: 20s
       retries: 10
 
-#  db_adminer:
-#    image: adminer
-#    networks:
-#      - backend
-#    depends_on:
-#      - mysql_container
-#    restart: always
-#    ports:
-#      - 8081:8080
-
   rest-api:
     image: subalig/db-api:latest
     networks:
