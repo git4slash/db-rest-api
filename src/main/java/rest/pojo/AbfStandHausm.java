@@ -25,7 +25,7 @@ public class AbfStandHausm {
     private String aufgabe;
     private String telFestnetz;
     private String telMobil;
-    private String telprivat;
+    private String telPrivat;
     private String bemerkung;
 
     public Integer getId() {
@@ -156,12 +156,12 @@ public class AbfStandHausm {
         this.telMobil = telMobil;
     }
 
-    public String getTelprivat() {
-        return telprivat;
+    public String getTelPrivat() {
+        return telPrivat;
     }
 
-    public void setTelprivat(String telprivat) {
-        this.telprivat = telprivat;
+    public void setTelPrivat(String telPrivat) {
+        this.telPrivat = telPrivat;
     }
 
     public String getBemerkung() {

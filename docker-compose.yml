@@ -1,10 +1,8 @@
 version: '3'
 
 services:
-  mysql_container:
+  db:
     image: mysql:5
-    networks:
-      - backend
     environment:
       - MYSQL_USER=backend_db_user
       - MYSQL_PASSWORD=somePassword4User
@@ -16,17 +14,17 @@ services:
       timeout: 20s
       retries: 10
 
+  adminer:
+    image: adminer
+    ports:
+      - 8081:8080
+    depends_on:
+      - db
+
   rest-api:
     image: subalig/db-api:latest
-    networks:
-      - backend
-      - frontend
     ports:
-      - 8080:8080
+      - 80:8080
     depends_on:
-      - mysql_container
+      - db
 # TODO create timeout before start (mysql needed some time to start)
-
-networks:
-  backend:
-  frontend:
