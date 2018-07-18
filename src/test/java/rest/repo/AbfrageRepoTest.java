@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
-import rest.TestHelper;
+import rest.DemoData;
 import rest.pojo.AbfStandHausm;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class AbfrageRepoTest {
 
     @Before
     public void setUp() throws Exception {
-        entities = TestHelper.getThreeAbragen();
+        entities = DemoData.getDemoData();
     }
 
     @Test

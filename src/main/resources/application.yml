@@ -1,0 +1,23 @@
+
+app.name: rest-api
+welcome.message: Welcome to ${app.name}!
+logging.level.org.springgramework.web: error
+server.port: 80
+
+---
+
+spring.profiles: DEV
+welcome.message: ${app.name} is in ${spring.profiles} mode!
+logging.level.org.springgramework.web: debug
+
+---
+
+spring:
+  profiles: STAGING
+  jpa.hibernate.ddl-auto: validate
+  datasource:
+    url: jdbc:mysql://db:3306/some_db
+    username: backend_db_user
+    password: somePassword4User
+welcome.message: ${app.name} is in ${spring.profiles} mode!
+logging.level.org.springgramework.web: error

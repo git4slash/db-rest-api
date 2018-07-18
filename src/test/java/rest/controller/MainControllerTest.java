@@ -11,16 +11,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import rest.TestHelper;
+import rest.DemoData;
 import rest.pojo.AbfStandHausm;
 import rest.repo.AbfrageRepo;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MainControllerTest {
@@ -47,7 +45,7 @@ public class MainControllerTest {
                 .addFilter(new MainFilter())
                 .build();
 
-        testEntities = TestHelper.getThreeAbragen();
+        testEntities = DemoData.getDemoData();
     }
 
     // TODO write test's to main controller

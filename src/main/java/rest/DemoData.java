@@ -5,8 +5,8 @@ import rest.pojo.AbfStandHausm;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestHelper {
-    public static List<AbfStandHausm> getThreeAbragen() {
+public class DemoData {
+    public static List<AbfStandHausm> getDemoData() {
         return Arrays.asList(
                 new AbfStandHausm(1, "SomeText"),
                 new AbfStandHausm(2, "SomeText2"),
