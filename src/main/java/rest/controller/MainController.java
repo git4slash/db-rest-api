@@ -1,22 +1,31 @@
 package rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import rest.pojo.AbfStandHausm;
 import rest.repo.AbfrageRepo;
 
-@Controller
+@RestController
 @RequestMapping(path = "/")
 public class MainController {
-    @Autowired
-    private AbfrageRepo repository;
+    private final AbfrageRepo repository;
 
-    @GetMapping(path = "/all")
+    @Autowired
+    public MainController(AbfrageRepo repository) {
+        this.repository = repository;
+    }
+
+    @GetMapping(path = "/")
     public @ResponseBody
     Iterable<AbfStandHausm> getAllEntities() {
         return repository.findAll();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void updateAbfrage(@RequestBody AbfStandHausm abfrage) {
+
     }
 }
