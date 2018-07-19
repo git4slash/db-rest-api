@@ -1,12 +1,26 @@
 
-app.name: rest-api
+app:
+  name: rest-api
+  descrption: ${app.name} is a rest service for LK-WF data base.
 welcome.message: Welcome to ${app.name}!
 logging.level.org.springgramework.web: error
 server.port: 80
 
 ---
 
-spring.profiles: DEV
+spring:
+  profiles: DEV
+# datasource.platform: someFileSuffix
+# indicates to execute script in data-someFileSuffix.sql
+  datasource.platform: h2-test
+  jpa.hibernate.ddl-auto: create-drop
+#  h2 console start
+#  next two strings enables h2 console, which is available at http://localhost/h2-console
+#  with user name: sa and blank pass. URL: jdbc:h2:mem:testdb (DB name is testdb)
+  h2.console:
+    enabled: true
+    path: /h2-console
+#  h2 console end
 welcome.message: ${app.name} is in ${spring.profiles} mode!
 logging.level.org.springgramework.web: debug
 
@@ -16,7 +30,7 @@ spring:
   profiles: STAGING
   jpa.hibernate.ddl-auto: validate
   datasource:
-    url: jdbc:mysql://db:3306/some_db
+    url: jdbc:mysql://192.168.0.115:3306/some_db
     username: backend_db_user
     password: somePassword4User
 welcome.message: ${app.name} is in ${spring.profiles} mode!
