@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import rest.DemoData;
-import rest.pojo.AbfStandHausm;
+import rest.pojo.TableView;
 
 import java.util.List;
 
@@ -18,14 +18,14 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class AbfrageRepoTest {
+public class TableViewRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private AbfrageRepo repo;
+    private TableViewRepository repo;
 
-    private List<AbfStandHausm> entities;
+    private List<TableView> entities;
 
     @Before
     public void setUp() throws Exception {

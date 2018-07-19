@@ -3,29 +3,36 @@ package rest.pojo;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Table(name = "abf_stand_hausm")
 @Entity
-public class AbfStandHausm {
+public class TableView {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     private Integer intern;
     private String standort;
 
     // constructor for JPA && JSON purposes
-    public AbfStandHausm() {}
+    public TableView() {}
 
-    public AbfStandHausm(Integer intern, String standort) {
+    public TableView(Integer intern, String standort) {
         this.intern = intern;
         this.standort = standort;
     }
 
-    public Integer getId() {
+    public void updateWith(TableView entityToUpdate) {
+        this.intern = entityToUpdate.intern;
+        this.standort = entityToUpdate.standort;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
