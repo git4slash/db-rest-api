@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Table(name = "abf_stand_hausm")
 @Entity
@@ -52,7 +53,21 @@ public class TableView {
         this.standort = standort;
     }
 
-    //    private String strasse;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TableView tableView = (TableView) o;
+        return Objects.equals(getIntern(), tableView.getIntern()) &&
+                Objects.equals(getStandort(), tableView.getStandort());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIntern(), getStandort());
+    }
+
+//    private String strasse;
 //    private String nr;
 //    private Integer plz;
 //    private String ort;

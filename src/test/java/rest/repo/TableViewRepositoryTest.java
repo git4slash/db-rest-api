@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
-import rest.DemoData;
+import rest.TestHelper;
 import rest.pojo.TableView;
 
 import java.util.List;
@@ -25,24 +25,23 @@ public class TableViewRepositoryTest {
     @Autowired
     private TableViewRepository repo;
 
-    private List<TableView> entities;
+    private List<TableView> demoEntities;
 
     @Before
     public void setUp() throws Exception {
-        entities = DemoData.getDemoData();
+        demoEntities = TestHelper.getDemoData();
     }
 
     @Test
-    public void testFindAll() {
+    public void givenDemoEntities_whenEntityManagerPersists_thenRepositoryReturnsRightSize() {
 
+        // Given
         long entitiesInRepoBefore = repo.count();
 
-        entities.forEach(entityManager::persist);
+        // When
+        demoEntities.forEach(entityManager::persist);
 
-        long entitiesInRepoAfter = repo.count();
-
-        assertThat( (int) (entitiesInRepoAfter - entitiesInRepoBefore), is(entities.size()));
-
-        entities.forEach(entityManager::remove);
+        // Then
+        assertThat(repo.count() - entitiesInRepoBefore, is( (long) demoEntities.size()));
     }
 }

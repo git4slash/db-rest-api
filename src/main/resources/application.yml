@@ -7,7 +7,8 @@ app:
     suffix:
         entity: /entity
         all: /all
-welcome.message: Welcome to ${app.name}!
+        about_service: /info
+about_service: Welcome to ${app.name}!
 logging.level.org.springgramework.web: error
 server.port: 80
 
@@ -26,7 +27,7 @@ spring:
     enabled: true
     path: /h2-console
 #  h2 console end
-welcome.message: ${app.name} is in ${spring.profiles} mode!
+about_service: ${app.name} is in ${spring.profiles} mode!
 logging.level.org.springgramework.web: debug
 
 ---
@@ -38,5 +39,5 @@ spring:
     url: jdbc:mysql://192.168.0.115:3306/some_db
     username: backend_db_user
     password: somePassword4User
-welcome.message: ${app.name} is in ${spring.profiles} mode!
+about_service: ${app.name} is in ${spring.profiles} mode!
 logging.level.org.springgramework.web: error
