@@ -37,10 +37,7 @@ public class MainController {
 
     @PatchMapping(path = "${app.address.suffix.entity}/{id}")
     public TableView updateById(@PathVariable long id, @RequestBody TableView receivedEntity) {
-        // Retrieving reference to object in db (without fetching it from db)
-        TableView dbEntity = repository.getOne(id);
-        // Updating existing obj with received data
-        dbEntity.updateWith(receivedEntity);
-        return repository.save(dbEntity);
+        receivedEntity.setId(id);
+        return repository.save(receivedEntity);
     }
 }

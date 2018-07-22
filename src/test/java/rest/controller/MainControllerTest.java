@@ -1,5 +1,6 @@
 package rest.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 import rest.Application;
 import rest.TestHelper;
@@ -21,8 +24,9 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -62,13 +66,10 @@ public class MainControllerTest {
 
     @Before
     public void setUp() throws Exception {
+
         this.mvc = webAppContextSetup(webApplicationContext).build();
 
-        this.repository.deleteAllInBatch();
-
-        List<TableView> demoEntitiesList = TestHelper.getDemoData();
-
-        this.savedEntitiesList = this.repository.saveAll(demoEntitiesList);
+        this.savedEntitiesList = this.repository.findAll();
     }
 
     @Test
@@ -81,7 +82,9 @@ public class MainControllerTest {
         mvc.perform(get(apiUrl))
 
         // Then
-                .andDo(print())
+                // check response status is in 200 range
+                .andExpect(status().isOk())
+                // and content type is json
                 .andExpect(content().contentType(contentType));
     }
 
@@ -117,7 +120,7 @@ public class MainControllerTest {
 
         // Given
         TableView tableViewEntity = savedEntitiesList.get(0);
-        String existingTableViewEntityUrl = apiAddress + entitySuffix + "/" + tableViewEntity.getId();
+        String existingTableViewEntityUrl = apiAddress + entitySuffix + "/" + tableViewEntity.getId().intValue();
 
         // When
         mvc.perform(get(existingTableViewEntityUrl))
@@ -125,6 +128,35 @@ public class MainControllerTest {
         //Then
                 .andExpect(jsonPath("$.intern", is(tableViewEntity.getIntern())))
                 .andExpect(jsonPath("$.standort", is(tableViewEntity.getStandort())));
+    }
+
+    @Test
+    public void givenExistingEntityUrl_whenPatchRequestIsExecuted_thenReceived200StatusAndInformationIsCorrect() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Given
+        // getting id of existing entity
+        String existingEntityUrl = apiAddress + entitySuffix + "/" + savedEntitiesList.get(0).getId().intValue();
+
+        long entitiesInRepoBeforePatch = repository.count();
+
+        // creating updated entity
+        TableView updatedEntity = new TableView(333, "Updated standort", "Updated strasse", "Updated nr", 99999, "New ort", "Some tel", "some tel2", "", "Herr", "Burger", "King", "", "tel", "mobile", "privat", "too many fields, the entity is clearly overloaded");
+
+        // let's make json from our obj:
+        String existingEntityJSON = mapper.writeValueAsString(updatedEntity);
+
+        // When
+        mvc.perform(patch(existingEntityUrl)
+
+        // Then
+                .contentType(contentType)
+                .content(existingEntityJSON))
+            // checking patch-request response status
+            .andExpect(status().isOk());
+
+        // lets check entities quantity
+        assert repository.count() == entitiesInRepoBeforePatch;
     }
 
     @Test

@@ -34,7 +34,8 @@ logging.level.org.springgramework.web: debug
 
 spring:
   profiles: staging
-  jpa.hibernate.ddl-auto: validate
+#  TODO sort out why validate don't work
+  jpa.hibernate.ddl-auto: none
   datasource:
     url: jdbc:mysql://192.168.0.115:3306/some_db
     username: backend_db_user

@@ -29,7 +29,7 @@ public class TableViewRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        demoEntities = TestHelper.getDemoData();
+        demoEntities = TestHelper.DEMO_DATA;
     }
 
     @Test
