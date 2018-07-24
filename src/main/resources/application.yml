@@ -12,10 +12,10 @@ logging.level:
   org.springgramework.web: error
   root: error
   hibernate: error
-  pattern.file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+#  pattern.file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 # lets save log output to a log-file
 #  file: ${java.io.tmpdir}/${app.name}.log
-server.port: 80
+server.port: 8080
 
 ---
 

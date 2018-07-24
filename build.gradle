@@ -18,7 +18,7 @@ apply plugin: 'com.palantir.docker'
 
 bootJar {
     baseName = 'db-api'
-    version =  '0.0.2'
+    version =  '0.0.3'
 }
 
 group = 'subalig'

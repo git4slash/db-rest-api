@@ -33,15 +33,18 @@ public class TableViewRepositoryTest {
     }
 
     @Test
-    public void givenDemoEntities_whenEntityManagerPersists_thenRepositoryReturnsRightSize() {
+    public void givenDemoEntities_whenEntityManagerPersists_thenRepositoryReturnsRightSizeAndInformationIsCorrect() {
 
         // Given
         long entitiesInRepoBefore = repo.count();
 
         // When
-        demoEntities.forEach(entityManager::persist);
+        List<TableView> savedEnteties = repo.saveAll(demoEntities);
 
         // Then
         assertThat(repo.count() - entitiesInRepoBefore, is( (long) demoEntities.size()));
+        savedEnteties.forEach(
+                entity -> assertThat(entityManager.find(TableView.class, entity.getId()), is(entity))
+        );
     }
 }

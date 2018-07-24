@@ -1,28 +1,26 @@
 package rest.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import rest.Application;
+import rest.TestHelper;
 import rest.pojo.TableView;
 import rest.repo.TableViewRepository;
 
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -72,7 +70,7 @@ public class MainControllerTest {
 
         this.mvc = webAppContextSetup(webApplicationContext).build();
 
-        this.savedEntitiesList = this.repository.findAll();
+        this.savedEntitiesList = this.repository.saveAll(TestHelper.DEMO_DATA);
 
         mapper = new ObjectMapper();
     }
@@ -210,5 +208,10 @@ public class MainControllerTest {
                 .content(mapper.writeValueAsString(savedEntitiesList.get(0))))
                 .andExpect(status().isOk())
         ;
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        repository.deleteAll(savedEntitiesList);
     }
 }
