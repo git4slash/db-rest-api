@@ -1,6 +1,5 @@
-
 app:
-  name: rest-api
+  name: db-api
   descrption: ${app.name} is a rest service for LK-WF data base.
   address:
     api: /api
@@ -9,7 +8,13 @@ app:
         all: /all
         about_service: /info
 about_service: Welcome to ${app.name}!
-logging.level.org.springgramework.web: error
+logging.level:
+  org.springgramework.web: error
+  root: error
+  hibernate: error
+  pattern.file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+# lets save log output to a log-file
+#  file: ${java.io.tmpdir}/${app.name}.log
 server.port: 80
 
 ---
@@ -17,28 +22,34 @@ server.port: 80
 spring:
   profiles: development
 # datasource.platform: someFileSuffix
-# indicates to execute script in data-someFileSuffix.sql
+# indicates to execute script in data-someFileSuffix.sql in src dir
   datasource.platform: h2-test
   jpa.hibernate.ddl-auto: create-drop
 #  h2 console start
 #  next two strings enables h2 console, which is available at http://localhost/h2-console
 #  with user name: sa and blank pass. URL: jdbc:h2:mem:testdb (DB name is testdb)
-  h2.console:
-    enabled: true
-    path: /h2-console
+#  h2.console:
+#    enabled: true
+#    path: /h2-console
 #  h2 console end
 about_service: ${app.name} is in ${spring.profiles} mode!
-logging.level.org.springgramework.web: debug
+logging.level:
+  org.springgramework.web: debug
+  root: debug
+  hibernate: debug
 
 ---
 
 spring:
   profiles: staging
-#  TODO sort out why validate don't work
+# TODO sort out why validate don't work
   jpa.hibernate.ddl-auto: none
   datasource:
     url: jdbc:mysql://192.168.0.115:3306/some_db
     username: backend_db_user
     password: somePassword4User
 about_service: ${app.name} is in ${spring.profiles} mode!
-logging.level.org.springgramework.web: error
+logging.level:
+  org.springgramework.web: error
+  root: error
+  hibernate: error

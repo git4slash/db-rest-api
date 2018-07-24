@@ -1,5 +1,6 @@
 package rest.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,20 +12,20 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 import rest.Application;
-import rest.TestHelper;
 import rest.pojo.TableView;
 import rest.repo.TableViewRepository;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -58,6 +59,8 @@ public class MainControllerTest {
 
     private List<TableView> savedEntitiesList;
 
+    private ObjectMapper mapper;
+
     @Autowired
     private TableViewRepository repository;
 
@@ -65,11 +68,13 @@ public class MainControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         this.mvc = webAppContextSetup(webApplicationContext).build();
 
         this.savedEntitiesList = this.repository.findAll();
+
+        mapper = new ObjectMapper();
     }
 
     @Test
@@ -132,8 +137,6 @@ public class MainControllerTest {
 
     @Test
     public void givenExistingEntityUrl_whenPatchRequestIsExecuted_thenReceived200StatusAndInformationIsCorrect() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-
         // Given
         // getting id of existing entity
         String existingEntityUrl = apiAddress + entitySuffix + "/" + savedEntitiesList.get(0).getId().intValue();
@@ -183,6 +186,29 @@ public class MainControllerTest {
                 .andExpect(jsonPath("$[2].id", is(savedEntitiesList.get(2).getId().intValue())))
                 .andExpect(jsonPath("$[2].intern", is(savedEntitiesList.get(2).getIntern())))
                 .andExpect(jsonPath("$[2].standort", is(savedEntitiesList.get(2).getStandort())));
+    }
 
+    @Test
+    public void givenExistingEntity_whenParameterUpdateRequestIsPerformed_thenRetrievedInformationIsCorrectAndStatusIs200() throws Exception {
+        this.runSetterTestFor("standort", "New York");
+        this.runSetterTestFor("intern", "424");
+        this.runSetterTestFor("plz", "11111");
+    }
+
+    void runSetterTestFor(String paramName, String paramValue) throws Exception {
+        // Given
+        TableView existingEntity = savedEntitiesList.get(0);
+        final String existingEntityUrl = apiAddress + entitySuffix + "/" + existingEntity.getId().intValue() + "/set";
+
+        // When
+        mvc.perform(patch(existingEntityUrl)
+                .param("param", paramName)
+                .param("value", paramValue)
+
+        // Then
+                .contentType(contentType)
+                .content(mapper.writeValueAsString(savedEntitiesList.get(0))))
+                .andExpect(status().isOk())
+        ;
     }
 }
